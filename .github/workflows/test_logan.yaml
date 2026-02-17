@@ -11,9 +11,10 @@ on:
 
 jobs:
   run-test-logan-41:
-    environment: ${{ inputs.logan_github_environment }}
     uses: ./.github/workflows/test_logan_41.yaml
     with:
       logan_github_environment: ${{ inputs.logan_github_environment }}
+    secrets:
+      LOGAN_IS_NOT_HAPPY: ${{ secrets.LOGAN_IS_NOT_HAPPY }}
     # secrets: inherit
     
