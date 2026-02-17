@@ -41,3 +41,12 @@ jobs:
           LOGAN_IS_HAPPY: ${{ secrets.IS_LOGAN_HAPPY }}
         run: |
           if [ "$LOGAN_IS_HAPPY" = "Yes" ]; then echo "Logan is happy"; else echo "Logan is sad"; fi
+  run-test-logan-41-again:
+    needs: run-test-logan-41
+    runs-on: ubuntu-latest
+    steps:
+      - name: Is Logan always happy?
+        env:
+          LOGAN_IS_ALWAYS_HAPPY: ${{ secrets.LOGAN_IS_ALWAYS_HAPPY }}
+        run: |
+          if [ "$LOGAN_IS_ALWAYS_HAPPY" = "No" ]; then echo "Logan is not always happy"; else echo "Logan is always happy"; fi
