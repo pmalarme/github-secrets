@@ -32,7 +32,7 @@ jobs:
       # reduce the inputs in the reusable workflow
       - name: Access to GitHub Environment variables
         run: |
-          echo "VARIABLE_IN_GITHUB_ENVIRONMENT: ${{ vars.VARIABLE_IN_GITHUB_ENVIRONMENT }}"
+          echo "MY_ENV_VARIABLE: ${{ vars.MY_ENV_VARIABLE }}"
       # 'GH_ENV_SECRET_ONLY' is only defined at GitHub environment level. But to have
       # access to it in the reusable workflow, we need to give the permission at the caller
       # workflow level, you need to lift the isolation of secrets by adding it at the
