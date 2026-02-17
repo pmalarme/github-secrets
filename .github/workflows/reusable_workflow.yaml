@@ -30,7 +30,7 @@ jobs:
       # Variables are not isolated in reusable workflows, so by defining 'environment: ',
       # we can access the environment variables in a reusable workflow and therefore
       # reduce the inputs in the reusable workflow
-      - name: Access to GitHub Environment variables
+      - name: Access to variables fron GH Env
         run: |
           echo "MY_VARIABLE: ${{ vars.MY_VARIABLE }}"
       # 'GH_ENV_SECRET_ONLY' is only defined at GitHub environment level. But to have
