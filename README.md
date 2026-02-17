@@ -178,7 +178,7 @@ Assuming the following secret configuration:
 
 ## When to Use Which Approach
 
->[!IMPROTANT]
+>[!IMPORTANT]
 > **Recommendation:** Following the **principle of least privilege**, it is recommended to **explicitly declare and pass secrets** to reusable workflows rather than using `secrets: inherit`. This ensures each workflow only has access to the secrets it actually needs, reducing the blast radius in case of a compromised or misconfigured workflow.
 
 | Scenario | Recommended Approach |
