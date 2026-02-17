@@ -1,4 +1,4 @@
-name: Reusable workflow
+name: Reusable workflow with Inherit
 
 on:
   workflow_call:
@@ -7,20 +7,14 @@ on:
         description: 'The GitHub environment'
         required: true
         type: string
-    # If 'secrets: inherit' is not used, the reusable workflow needs
-    # to explictly define the secrets it needs to access
-    # and the caller workflow needs to give the permission to use these secrets
-    # or give a value for these secrets at the caller workflow level
-    secrets:
-      GH_ENV_SECRET_ONLY:
-        description: 'Secret defined at GitHub environment level only'
-        required: true
-      SECRET_AT_REPO_AND_GH_ENV_LEVELS:
-        description: 'Secret defined both at GitHub repository and GitHub environment level'
-        required: true
-      SECRET_OVERRIDE_BY_VALUE:
-        description: 'Secret overridden by value at caller workflow level'
-        required: true
+    # If 'secrets: inherit' is used, there is no need
+    # to define explicitly the secrets in the reusable
+    # workflow, as all the secrets from Org, Repo and
+    # Environment level will be inherited and available
+    # in the reusable workflow. The caller workflow needs
+    # to give the permission to use these secrets at the
+    # caller workflow level by setting:
+    # 'secrets: inherit'
 
 jobs:
   run-reusable-workflow:
@@ -28,7 +22,7 @@ jobs:
     environment: ${{ inputs.github_environment }}
     steps:
       - name: Add title to Summary
-        run: echo "## Reusable workflow without secrets inheritance" >> $GITHUB_STEP_SUMMARY
+        run: echo "## Reusable workflow with secrets inheritance" >> $GITHUB_STEP_SUMMARY
       # Variables are not isolated in reusable workflows, so by defining 'environment: ',
       # we can access the environment variables in a reusable workflow and therefore
       # reduce the inputs in the reusable workflow
@@ -73,9 +67,11 @@ jobs:
               echo "SECRET_AT_REPO_AND_GH_ENV_LEVELS: Secret is not defined at GitHub environment level nor at repository level" >> $GITHUB_STEP_SUMMARY;
             fi
           fi
-      # Here the value of the secret SECRET_OVERRIDE_BY_VALUE is hardcoded at the caller workflow level,
-      # so it will override the value of the environment secret SECRET_OVERRIDE_BY_VALUE if it is set
-      - name: Secret overridden by value at caller workflow level
+      # Here the secret is not overriden by value at caller workflow level
+      # because the caller workflow is using 'secrets: inherit' and not 
+      # setting a value for the secret SECRET_OVERRIDE_BY_VALUE at caller
+      # workflow level, so the value defined at environment level will be used
+      - name: Secret not-overridden by value at caller workflow level
         env:
           SECRET_OVERRIDE_BY_VALUE: ${{ secrets.SECRET_OVERRIDE_BY_VALUE }}
         run: |
@@ -96,7 +92,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Add title to Summary
-        run: echo "## Reusable workflow without environment" >> $GITHUB_STEP_SUMMARY
+        run: echo "## Reusable workflow with inherit - without environment" >> $GITHUB_STEP_SUMMARY
       # Here 'environment: ' is not defined so the secrets defined at environment so
       # this job is not running in the context of an environment and will use the
       # the secrets defined at the repo level
