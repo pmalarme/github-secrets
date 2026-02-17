@@ -14,6 +14,9 @@ on:
       LOGAN_IS_ALWAYS_HAPPY:
         description: 'Is Logan always happy?'
         required: true
+      IS_LOGAN_HAPPY:
+        description: 'Is Logan happy?'
+        required: true
 
 jobs:
   run-test-logan-41:
@@ -33,3 +36,8 @@ jobs:
           LOGAN_IS_ALWAYS_HAPPY: ${{ secrets.LOGAN_IS_ALWAYS_HAPPY }}
         run: |
           if [ "$LOGAN_IS_ALWAYS_HAPPY" = "No" ]; then echo "Logan is not always happy"; else echo "Logan is always happy"; fi
+      - name: Check if Logan is happy or sad
+        env:
+          LOGAN_IS_HAPPY: ${{ secrets.IS_LOGAN_HAPPY }}
+        run: |
+          if [ "$LOGAN_IS_HAPPY" = "Yes" ]; then echo "Logan is happy"; else echo "Logan is sad"; fi

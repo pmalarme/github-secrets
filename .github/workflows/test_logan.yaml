@@ -20,5 +20,6 @@ jobs:
     secrets:
       LOGAN_IS_NOT_HAPPY: ${{ secrets.LOGAN_IS_NOT_HAPPY }} # Here I give the permission to use the secret LOGAN_IS_NOT_HAPPY in the called workflow. If the value is set at this workflow level, the environment secret value is not used.
       LOGAN_IS_ALWAYS_HAPPY: ${{ secrets.LOGAN_IS_ALWAYS_HAPPY }} # Here I give the permission to use the secret LOGAN_IS_ALWAYS_HAPPY in the called workflow. If the value is set at this workflow level, the environment secret value is not used.
+      IS_LOGAN_HAPPY: "No"
     # secrets: inherit # Here we give the permission to use any secrets in Org, Repo and Environment level.
     
