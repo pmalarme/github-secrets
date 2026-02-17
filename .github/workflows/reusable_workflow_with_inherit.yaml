@@ -16,6 +16,9 @@ on:
     # caller workflow level by setting:
     # 'secrets: inherit'
 
+permissions:
+  contents: read
+
 jobs:
   run-reusable-workflow:
     runs-on: ubuntu-latest
