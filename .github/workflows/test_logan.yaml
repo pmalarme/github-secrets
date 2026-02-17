@@ -9,12 +9,17 @@ on:
         default: 'logan'
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   run-test-logan-41:
     uses: ./.github/workflows/test_logan_41.yaml
     with:
       logan_github_environment: ${{ inputs.logan_github_environment }}
     secrets:
+      LOGAN_IS_NOT_HAPPY: "No"
+
       # LOGAN_IS_NOT_HAPPY: ${{ secrets.LOGAN_IS_NOT_HAPPY }}
     # secrets: inherit
     
