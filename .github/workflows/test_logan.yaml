@@ -18,8 +18,6 @@ jobs:
     with:
       logan_github_environment: ${{ inputs.logan_github_environment }}
     secrets:
-      LOGAN_IS_NOT_HAPPY: "No"
-
-      # LOGAN_IS_NOT_HAPPY: ${{ secrets.LOGAN_IS_NOT_HAPPY }}
+      LOGAN_IS_NOT_HAPPY: ${{ secrets.LOGAN_IS_NOT_HAPPY }}
     # secrets: inherit
     
