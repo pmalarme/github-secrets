@@ -1,0 +1,17 @@
+name: Logan Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      logan_github_environment:
+        description: 'The GitHub environment to use for Logan'
+        required: true
+        default: 'logan'
+        type: string
+
+jobs:
+  run-test-logan-41:
+    uses: ./.github/workflows/test_logan_41.yaml
+    with:
+      logan_github_environment: ${{ inputs.logan_github_environment }}
+    

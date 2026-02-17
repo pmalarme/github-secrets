@@ -1,0 +1,21 @@
+name: Logan Workflow 41
+
+on:
+  workflow_call:
+    inputs:
+      logan_github_environment:
+        description: 'The GitHub environment to use for Logan'
+        required: true
+        type: string
+
+jobs:
+  run-test-logan-41:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.logan_github_environment }}
+    steps:
+      - name: Is Logan happy?
+        run: echo "Logan is happy: ${{ var.LOGAN_IS_HAPPY }}"
+      - name: Is Logan sad?
+        env:
+          LOGAN_IS_SAD: ${{ secrets.LOGAN_IS_NOT_HAPPY }}
+        run: if [ "$LOGAN_IS_SAD" = "Yes" ]; then echo "Logan is sad"; else echo "Logan is not sad"; fi
