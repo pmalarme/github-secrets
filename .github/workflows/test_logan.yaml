@@ -11,8 +11,8 @@ on:
 
 jobs:
   run-test-logan-41:
-    uses: ./.github/workflows/test_logan_41.yaml
     environment: ${{ inputs.logan_github_environment }}
+    uses: ./.github/workflows/test_logan_41.yaml
     with:
       logan_github_environment: ${{ inputs.logan_github_environment }}
     # secrets: inherit
