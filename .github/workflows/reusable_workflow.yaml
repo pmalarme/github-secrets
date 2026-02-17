@@ -1,0 +1,98 @@
+name: Reusable workflow
+
+on:
+  workflow_call:
+    inputs:
+      github_environment:
+        description: 'The GitHub environment'
+        required: true
+        type: string
+    # If 'secrets: inherit' is not used, the reusable workflow needs
+    # to explictly define the secrets it needs to access
+    # and the caller workflow needs to give the permission to use these secrets
+    # or give a value for these secrets at the caller workflow level
+    secrets:
+      GH_ENV_SECRET_ONLY:
+        description: 'Secret defined at GitHub environment level only'
+        required: true
+      SECRET_AT_REPO_AND_GH_ENV_LEVELS:
+        description: 'Secret defined both at GitHub repository and GitHub environment level'
+        required: true
+      SECRET_OVERRIDE_BY_VALUE:
+        description: 'Secret overridden by value at caller workflow level'
+        required: true
+
+jobs:
+  run-reusable-workflow:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.github_environment }}
+    steps:
+      # Variables are not isolated in reusable workflows, so by defining 'environment: ',
+      # we can access the environment variables in a reusable workflow and therefore
+      # reduce the inputs in the reusable workflow
+      - name: Access to GitHub Environment variables
+        run: |
+          echo "GH_ENV_VARIABLE: ${{ vars.GH_ENV_VARIABLE }}"
+      # 'GH_ENV_SECRET_ONLY' is only defined at GitHub environment level. But to have
+      # access to it in the reusable workflow, we need to give the permission at the caller
+      # workflow level, you need to lift the isolation of secrets by adding it at the
+      # caller level. It does not pass a value but it gives the permission to use the secret
+      # in the called workflow.
+      - name: Secret defined at GitHub environment level only
+        env:
+          GH_ENV_SECRET_ONLY: ${{ secrets.GH_ENV_SECRET_ONLY }}
+        run: |
+          if [ "$GH_ENV_SECRET_ONLY" = "Environment" ]; then echo "Secret is defined at GitHub environment level only"; else echo "Secret is not defined at GitHub environment level"; fi
+      # Here, there is a value at repo level for the secret SECRET_AT_REPO_AND_GH_ENV_LEVELS.
+      # As in the caller workflow we give the permission to use the secret
+      # SECRET_AT_REPO_AND_GH_ENV_LEVELS, we can access it in the called workflow.
+      # As there is a value also in the environment, the value in the environment will be used
+      # as it has a higher precedence and because 'environment: ' is defined for this job
+      - name: Secrets defined both at GitHub repository and GitHub environment level
+        env:
+          SECRET_AT_REPO_AND_GH_ENV_LEVELS: ${{ secrets.v }}
+        run: |
+          if [ "$SECRET_AT_REPO_AND_GH_ENV_LEVELS" = "Environment" ];
+            then echo "Secret defined at GitHub environment level";
+          else
+            if [ "$SECRET_AT_REPO_AND_GH_ENV_LEVELS" = "Repository" ];
+              then echo "Secret defined at GitHub repository level";
+            else
+              echo "Secret is not defined at GitHub environment level nor at repository level";
+            fi
+          fi
+      # Here the value of the secret SECRET_OVERRIDE_BY_VALUE is hardcoded at the caller workflow level,
+      # so it will override the value of the environment secret SECRET_OVERRIDE_BY_VALUE if it is set
+      - name: Secret overridden by value at caller workflow level
+        env:
+          SECRET_OVERRIDE_BY_VALUE: ${{ secrets.SECRET_OVERRIDE_BY_VALUE }}
+        run: |
+          if [ "$SECRET_OVERRIDE_BY_VALUE" = "CallerWorkflow" ];
+            then echo "Logan is happy";
+          else
+            if [ "$SECRET_OVERRIDE_BY_VALUE" = "Environment" ];
+              then echo "Logan is happy because of the environment secret";
+            else
+              echo "Logan is not happy";
+            fi
+          fi
+  run-reusable-workflow-without-environment:
+    needs: run-reusable-workflow
+    runs-on: ubuntu-latest
+    steps:
+      # Here 'environment: ' is not defined so the secrets defined at environment so
+      # this job is not running in the context of an environment and will use the
+      # the secrets defined at the repo level
+      - name: Secrets defined both at GitHub repository and GitHub environment level
+        env:
+          SECRET_AT_REPO_AND_GH_ENV_LEVELS: ${{ secrets.v }}
+        run: |
+          if [ "$SECRET_AT_REPO_AND_GH_ENV_LEVELS" = "Environment" ];
+            then echo "Secret defined at GitHub environment level";
+          else
+            if [ "$SECRET_AT_REPO_AND_GH_ENV_LEVELS" = "Repository" ];
+              then echo "Secret defined at GitHub repository level";
+            else
+              echo "Secret is not defined at GitHub environment level nor at repository level";
+            fi
+          fi
