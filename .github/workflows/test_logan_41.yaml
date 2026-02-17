@@ -7,10 +7,10 @@ on:
         description: 'The GitHub environment to use for Logan'
         required: true
         type: string
-  secrets:
-    LOGAN_IS_NOT_HAPPY:
-      description: 'Is Logan not happy?'
-      required: true
+    secrets:
+      LOGAN_IS_NOT_HAPPY:
+        description: 'Is Logan not happy?'
+        required: true
 
 jobs:
   run-test-logan-41:
