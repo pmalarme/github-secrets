@@ -20,6 +20,6 @@ jobs:
     secrets:
       GH_ENV_SECRET_ONLY: ${{ secrets.GH_ENV_SECRET_ONLY }} # The permission is granted to use the secret LOGAN_IS_NOT_HAPPY in the called workflow. The value is not set at repo level so it will use the value of the environment secret.
       SECRET_AT_REPO_AND_GH_ENV_LEVELS: ${{ secrets.SECRET_AT_REPO_AND_GH_ENV_LEVELS }} # The permission is granted to use the secret LOGAN_IS_ALWAYS_HAPPY in the called workflow. The value is set both at repo level and at environment level.
-      SECRET_OVERRIDE_BY_VALUE: "No" # The value is hardcoded at the caller workflow level, so it will override the value of the environment secret IS_LOGAN_HAPPY if it is set
+      SECRET_OVERRIDE_BY_VALUE: "CallerWorkflow" # The value is hardcoded at the caller workflow level, so it will override the value of the environment secret IS_LOGAN_HAPPY if it is set
     # secrets: inherit # Here we give the permission to use any secrets in Org, Repo and Environment level.
     

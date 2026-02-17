@@ -50,7 +50,7 @@ jobs:
       # as it has a higher precedence and because 'environment: ' is defined for this job
       - name: Secrets defined both at GitHub repository and GitHub environment level
         env:
-          SECRET_AT_REPO_AND_GH_ENV_LEVELS: ${{ secrets.v }}
+          SECRET_AT_REPO_AND_GH_ENV_LEVELS: ${{ secrets.SECRET_AT_REPO_AND_GH_ENV_LEVELS }}
         run: |
           if [ "$SECRET_AT_REPO_AND_GH_ENV_LEVELS" = "Environment" ];
             then echo "Secret defined at GitHub environment level";
@@ -68,12 +68,12 @@ jobs:
           SECRET_OVERRIDE_BY_VALUE: ${{ secrets.SECRET_OVERRIDE_BY_VALUE }}
         run: |
           if [ "$SECRET_OVERRIDE_BY_VALUE" = "CallerWorkflow" ];
-            then echo "Logan is happy";
+            then echo "Secret overridden by value at caller workflow level";
           else
             if [ "$SECRET_OVERRIDE_BY_VALUE" = "Environment" ];
-              then echo "Logan is happy because of the environment secret";
+              then echo "Secret defined at GitHub environment level";
             else
-              echo "Logan is not happy";
+              echo "Secret is not defined at caller workflow level nor at environment level";
             fi
           fi
   run-reusable-workflow-without-environment:
