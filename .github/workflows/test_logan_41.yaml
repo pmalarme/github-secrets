@@ -20,4 +20,4 @@ jobs:
         env:
           LOGAN_IS_SAD: ${{ secrets.LOGAN_IS_NOT_HAPPY }}
         run: |
-          echo "Logan is sad: $LOGAN_IS_SAD"
+          if [ "$LOGAN_IS_SAD" = "Yes" ]; then echo "Logan is sad"; else echo "Logan is not sad"; fi
